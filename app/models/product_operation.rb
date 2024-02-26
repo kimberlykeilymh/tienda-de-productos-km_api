@@ -43,5 +43,9 @@ module Models
 				end
 			end
 		end
+
+		def self.get_by_user_id(id, user_id)
+			product_operation = DatabaseConnection.db_client[:product_operations].where(id:, user_id:).first
+		end
 	end
 end
