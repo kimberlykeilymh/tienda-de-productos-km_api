@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    dotenv (3.0.2)
+    json (2.7.1)
     rack (3.0.9.1)
 
 PLATFORMS
@@ -8,6 +10,8 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  dotenv (~> 3.0)
+  json (~> 2.7)
   rack (~> 3.0)
 
 RUBY VERSION

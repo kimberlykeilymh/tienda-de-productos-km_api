@@ -5,5 +5,6 @@ source "https://rubygems.org"
 ruby file: ".ruby-version"
 
 gem 'rack', '~> 3.0'
+gem 'dotenv', '~> 3.0'
 
 gem 'json', '~> 2.7'
