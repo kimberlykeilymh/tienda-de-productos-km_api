@@ -13,6 +13,10 @@ class RackResponse
 			build_rack_response(200, body.to_json)
 		end
 
+		def accepted(body)
+			build_rack_response(202, body.to_json)
+		end
+
 		def bad_request(error = 'Bad Request')
 			build_rack_response(400, { status: 400, error: }.to_json)
 		end

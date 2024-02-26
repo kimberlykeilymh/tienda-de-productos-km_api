@@ -3,7 +3,7 @@
 require_relative '../lib/database_connection'
 
 db = DatabaseConnection.db_client
-db.drop_table?(:products, :users)
+db.drop_table?(:product_operations, :products, :users)
 DatabaseConnection.create_tables
 
 require_relative '../app/models/user'

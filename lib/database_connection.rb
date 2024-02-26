@@ -23,6 +23,7 @@ class DatabaseConnection
     def create_tables
       create_users_table
       create_products_table
+			create_product_operation_table
     end
 
     private
@@ -44,6 +45,18 @@ class DatabaseConnection
 				Timestamp :created_at, default: Sequel.lit("now()")
 				foreign_key :user_id, :users, null: false
 				unique [:name, :user_id]
+      end
+    end
+
+    def create_product_operation_table
+      db_client.create_table? :product_operations do
+				primary_key :id
+				String :type, null: false
+				String :status, null: false, default: 'pending'
+				String :product_payload, null: false
+				Timestamp :created_at, default: Sequel.lit("now()")
+				foreign_key :product_id, :products
+				foreign_key :user_id, :users, null: false
       end
     end
 	end
