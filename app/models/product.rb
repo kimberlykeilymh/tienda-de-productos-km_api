@@ -15,5 +15,9 @@ module Models
 			validates_presence [:name, :price, :user_id]
 			validates_unique	 [:name, :user_id]
 		end
+
+		def self.get_all_by_user_id(user_id)
+			DatabaseConnection.db_client[:products].where(user_id:).all
+		end
 	end
 end
