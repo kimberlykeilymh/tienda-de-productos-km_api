@@ -23,5 +23,14 @@ module Models
 			super
 			self.password_digest = encrypt_password(password_digest)
 		end
+
+		def self.authenticate(username, password)
+			user = self.find(username: username)
+			user && user.valid_password?(password) ? user : nil
+		end
+
+		def valid_password?(password)
+			verify_password(password_digest, password)
+		end
 	end
 end
