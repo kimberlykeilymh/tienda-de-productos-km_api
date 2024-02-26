@@ -2,6 +2,8 @@
 
 require 'sequel'
 
+require_relative '../../lib/utils'
+
 module Models
 	class User < Sequel::Model
 		include Utils
@@ -15,6 +17,11 @@ module Models
 			validates_presence [:username, :password_digest]
 			validates_unique 	 [:username]
 			# TODO: validate password format (regex: ^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$)
+		end
+
+		def before_create
+			super
+			self.password_digest = encrypt_password(password_digest)
 		end
 	end
 end
