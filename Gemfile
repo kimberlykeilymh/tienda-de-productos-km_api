@@ -12,4 +12,6 @@ gem 'sequel', '~> 5.77'
 
 gem 'bcrypt', '~> 3.1'
 
+gem 'jwt', '~> 2.8'
+
 gem 'json', '~> 2.7'
