@@ -2,4 +2,10 @@
 
 require_relative 'app/api'
 
-run Api.new
+app = Rack::Builder.new do
+	map '/api' do
+    run Api.new
+  end
+end
+
+run app
