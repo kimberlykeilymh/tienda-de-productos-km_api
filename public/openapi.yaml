@@ -1,0 +1,471 @@
+openapi: 3.1.0
+info:
+  title: Tienda de Productos KM - REST API v1
+  description: |
+    REST API para la gestión de productos en la tienda KM.
+    Algunos enlaces útiles:
+    - [El repositorio de la API](https://github.com/kimberlykeilymh/tienda-de-productos-km_api)
+    - [La definición de la API](https://github.com/kimberlykeilymh/tienda-de-productos-km_api/blob/main/public/openapi.yaml)
+  version: 1.0.0
+  contact:
+    email: kimberlymendoza154@gmail.com
+externalDocs:
+  description: Encuentra más información acerca de la API
+  url: https://github.com/kimberlykeilymh/tienda-de-productos-km_api
+servers:
+  - url: http://127.0.0.1:9292/api
+tags:
+  - name: product
+    description: Endpoints para consultar y crear productos.
+  - name: product-operation
+    description: Endpoint para consultar el estado de una operación de producto.
+  - name: test
+    description: Endpoint para probar el correcto funcionamiento de la API.
+  - name: user
+    description: Endpoint para autenticarse y poder acceder a los productos y sus operaciones.
+paths:
+  /ping:
+    get:
+      summary: Permite saber si la API está operativa
+      description: Devuelve un 'pong' para evaluar si la API está en funcionamiento
+      tags:
+        - test
+      operationId: ping
+      security: []
+      responses:
+        '200':
+          description: una cadena 'pong'
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                pong
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                internalServerError:
+                  $ref: '#/components/examples/internalServerError'
+  /login:
+    post:
+      summary: Permite autenticar al usuario
+      description: Devuelve un JWT para utilizar en los endpoints que requieren autenticación
+      tags:
+        - user
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginCredentials'
+            examples:
+              loginCredentials:
+                $ref: '#/components/examples/loginCredentials'
+      responses:
+        '200':
+          description: Detalles de la sesión generada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userSession'
+              examples:
+                userSession:
+                  $ref: '#/components/examples/userSession'
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                badRequestError:
+                  $ref: '#/components/examples/badRequestError'
+        '403':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                forbiddenError:
+                  $ref: '#/components/examples/forbiddenError'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                internalServerError:
+                  $ref: '#/components/examples/internalServerError'
+  /products:
+    get:
+      summary: Permite obtener todos los productos de un usuario
+      description: Devuelve una lista con todos los productos del usuario actual
+      tags:
+        - product
+      operationId: obtenerProductos
+      responses:
+        '200':
+          description: Listado de productos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/productList'
+              examples:
+                productList:
+                  $ref: '#/components/examples/productList'
+        '401':
+          description: Autorización requerida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                authorizationRequiredError:
+                  $ref: '#/components/examples/authorizationRequiredError'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                internalServerError:
+                  $ref: '#/components/examples/internalServerError'
+    post:
+      summary: Permite solicitar la creación de un producto
+      description: Endpoint asíncrono, crea una operación de producto y devuelve la información de la operación para 
+        el seguimiento de la solicitud. Utilice el enlace devuelto para consultar el estado de la operación y obtener 
+        el resultado y el ID del producto creado (si la operación fue exitosa)
+      tags:
+        - product
+      operationId: crearProducto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/productInput'
+            examples:
+              productInput:
+                $ref: '#/components/examples/productInput'
+      responses:
+        '202':
+          description: Aceptado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/operationInfo'
+              examples:
+                operationInfo:
+                  $ref: '#/components/examples/operationInfo'
+        '400':
+          description: Solicitud incorrecta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                badRequestError:
+                  $ref: '#/components/examples/badRequestError'
+        '401':
+          description: Autorización requerida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                authorizationRequiredError:
+                  $ref: '#/components/examples/authorizationRequiredError'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                internalServerError:
+                  $ref: '#/components/examples/internalServerError'
+  /product-operation/{id}:
+    get:
+      summary: Permite obtener una operación de producto
+      description: Devuelve una operación de producto con el estado actual de la solicitud que la generó
+      tags:
+        - product-operation
+      operationId: obtenerOperacionProducto
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        '200':
+          description: Detalle de la operacion de producto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/operationProduct'
+              examples:
+                operationProduct:
+                  $ref: '#/components/examples/operationProduct'
+        '404':
+          description: No encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                notFoundtError:
+                  $ref: '#/components/examples/notFoundtError'
+        '401':
+          description: Autorización requerida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                authorizationRequiredError:
+                  $ref: '#/components/examples/authorizationRequiredError'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                internalServerError:
+                  $ref: '#/components/examples/internalServerError'
+components:
+  parameters:
+    id:
+      name: id
+      description: El ID del recurso que se está solicitando
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/id"
+  schemas:
+    id:
+      type: integer
+      format: int64
+      minimum: 1
+      examples:
+        - 10
+        - 25
+    loginCredentials:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+    userSession:
+      type: object
+      required:
+        - username
+        - token
+        - exp
+      properties:
+        username:
+          type: string
+        token:
+          type: string
+        exp:
+          type: string
+    productInput:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+    product:
+      type: object
+      required:
+        - id
+        - name
+        - price
+        - created_at
+        - user_id
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
+          type: string
+        price:
+          type: number
+          format: float
+        created_at:
+          type: string
+        user_id:
+          $ref: "#/components/schemas/id"
+    productList:
+      type: array
+      items:
+        $ref: '#/components/schemas/product'
+    operationInfo:
+      type: object
+      required:
+        - operation_id
+        - status
+        - created_at
+        - href
+      properties:
+        operation_id:
+          $ref: "#/components/schemas/id"
+        status:
+          type: string
+          description: 'Estado actual de la operación'
+          default: 'pending'
+          enum:
+            - pending
+            - completed
+            - failed
+        created_at:
+          type: string
+        href:
+          type: string
+    operationProduct:
+      type: object
+      required:
+        - id
+        - type
+        - status
+        - product_payload
+        - created_at
+        - product_id
+        - user_id
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        type:
+          type: string
+          description: 'Tipo de operación'
+          enum:
+            - create
+        status:
+          type: string
+          description: 'Estado actual de la operación'
+          default: 'pending'
+          enum:
+            - pending
+            - completed
+            - failed
+        product_payload:
+          type: string
+        created_at:
+          type: string
+        product_id:
+          $ref: "#/components/schemas/id"
+        user_id:
+          $ref: "#/components/schemas/id"
+    error:
+      type: object
+      required:
+        - status
+        - error
+      properties:
+        status:
+          type: integer
+          format: int32
+          enum:
+            - 400
+            - 401
+            - 403
+            - 404
+            - 405
+            - 500
+        error:
+          type: string
+  examples:
+    loginCredentials:
+      value:
+        username: username_A
+        password: mySecretPassword
+    userSession:
+      value:
+        username: username_A
+        token: eyJhbGciOiJkioI1NiJ9.eyJkYXRhIjp7InVzZXJfaWQiOjF9LCJleHAiOjE3MDkwNjIzMTIsImlhdCI6MTcwODk3NTkxMn0.k1k2sZkDUqbxr9N0B_XxaWmXOQ7jsueBYphkC-fxlkM
+        exp: 2024-02-26 16:32:51 -0300
+    productInput:
+      value:
+        name: Product ABC
+        price: 5460.25
+    product:
+      value:
+        id: 25
+        name: Product ABC
+        price: 5460.25
+        created_at: 2024-02-26 16:30:56 -0300
+        user_id: 5
+    productList:
+      value:
+        - id: 25
+          name: Product ABC
+          price: 5460.25
+          created_at: '2024-02-26 16:30:56 -0300'
+          user_id: 5
+        - id: 26
+          name: Product XYZ
+          price: 1250.00
+          created_at: '2023-11-15 08:10:25 -0300'
+          user_id: 5
+    operationInfo:
+      value:
+        operation_id: 5
+        status: pending
+        created_at: 2024-02-26 16:32:51 -0300
+        href: /api/product-operation/5
+    operationProduct:
+      value:
+        id: 5
+        type: create
+        status: pending
+        product_payload: '{ "name" : "Product ABC", "price" : 4525.0}'
+        created_at: 2024-02-26 16:32:51 -0300
+        product_id: 14
+        user_id: 5
+    badRequestError:
+      value:
+        status: 400
+        error: Bad Request
+    authorizationRequiredError:
+      value:
+        status: 401
+        error: Authorization Required
+    forbiddenError:
+      value:
+        status: 403
+        error: Forbidden
+    notFoundtError:
+      value:
+        status: 404
+        error: Not found
+    methodNotAllowedError:
+      value:
+        status: 405
+        error: Method not allowed
+    internalServerError:
+      value:
+        status: 500
+        error: Internal Server Error
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Token Bearer usando un Json Web Token (JWT)
+      type: http
+      scheme: Bearer
+      bearerFormat: JWT
+security:
+  - bearerHttpAuthentication: []
