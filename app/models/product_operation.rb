@@ -38,6 +38,7 @@ module Models
 					self.status = STATUS[:completed]
 					self.save
 				rescue
+					# TODO: add message error to product operation
 					self.status = STATUS[:failed]
 					self.save
 				end

@@ -45,6 +45,7 @@ module Handlers
 				operation_id: product_operation.id,
 				status: product_operation.status,
 				created_at: product_operation.created_at,
+				# TODO: improve href field to avoid literal string inside a method
 				href: "/api/product-operation/#{ product_operation.id }"
 			}
 		end
