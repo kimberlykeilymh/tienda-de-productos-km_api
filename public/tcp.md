@@ -1,0 +1,1 @@
+El Protocolo de Control de Transmisión (TCP) se encuentra en la capa de transporte y se encarga de crear conexiones dentro de una red de computadoras para intercambiar datos, asegurando que los datos lleguen a su destino sin errores y en el mismo orden en el que fueron transmitidos

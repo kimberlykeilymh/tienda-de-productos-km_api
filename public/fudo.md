@@ -1,0 +1,3 @@
+Fudo es una aplicación en línea diseñada para administrar locales gastronómicos. Ofrece un conjunto de herramientas que centralizan las diferentes operaciones involucradas en la ventas y gestión del negocio. Con Fudo, puedes tomar pedidos, configurar mesas, administrar entregas, controlar el inventario, obtener análisis detallados en tiempo real y aumentar los canales de venta.
+ 
+Su interfaz moderna y flexible funciona en cualquier dispositivo y se puede obtener de forma inmediata solo con tener acceso a Internet. Este servicio se ofrece a través de diferentes planes mensuales, semestrales o anuales con módulos adiciones para complementar con diversas funcionalidades.

@@ -1,0 +1,1 @@
+El Protocolo de Transferencia de Hipertexto (HTTP) es un protocolo sin estado que sigue el esquema petición-respuesta y define la comunicación que utilizan clientes, servidores y proxies web para comunicarse y transferir información a través de la World Wide Web. 
