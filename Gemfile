@@ -5,6 +5,7 @@ source "https://rubygems.org"
 ruby file: ".ruby-version"
 
 gem 'rack', '~> 3.0'
+gem 'rackup', '~> 2.1'
 gem 'dotenv', '~> 3.0'
 
 gem 'pg', '~> 1.5'
